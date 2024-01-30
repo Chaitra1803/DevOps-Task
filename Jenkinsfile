@@ -1,38 +1,34 @@
 pipeline {
-    agent any
-
-    environment {
-        DOCKER_IMAGE_NAME = "veera1808/mydevopstask"
-    }
-
-    stages {
+  agent any
+ stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-
-        stage('Build and Push Docker Image') {
-            steps {
-                script {
-                    // Build Docker Image
-                    docker.build(env.DOCKER_IMAGE_NAME, '.')
-
-                    // Push Docker Image to Docker Hub
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                        docker.image(env.DOCKER_IMAGE_NAME).push()
-                    }
-                }
-            }
-        }
+       
+    }
+  stages {
+    stage('Build') {
+      steps {
+        sh 'docker build -t mydevopstask .'
+        sh 'docker tag mydevopstask'
+      }
     }
 
-    post {
-        success {
-            script {
-                // Print Docker Image URL
-                echo "Docker Image URL: https://hub.docker.com/r/${env.DOCKER_IMAGE_NAME}"
-            }
-        }
+   stage('Test') {
+      steps {
+        */sh 'docker run my-flask python -m pytest app/tests/'/*
+      }
     }
+   stage('Deploy') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+          sh "echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin docker.io"
+          sh 'docker push veera1808/mydevopstask'
+        }
+      }
+    }
+    
+  }
 }
