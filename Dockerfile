@@ -4,5 +4,5 @@ FROM nginx:alpine
 # Copy the index.html file to the default Nginx web server directory
 COPY index.html /usr/share/nginx/html/
 
-# Expose port 80 for the web application
+# Expose port 8081 for the web application
 EXPOSE 8081
