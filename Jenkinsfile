@@ -19,7 +19,7 @@ pipeline {
                     docker.build(env.DOCKER_IMAGE_NAME, '.')
 
                     // Push Docker Image to Docker Hub
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                         docker.image(env.DOCKER_IMAGE_NAME).push()
                     }
                 }
