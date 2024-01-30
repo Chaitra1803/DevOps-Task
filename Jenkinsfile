@@ -14,10 +14,6 @@ pipeline {
         sh 'docker tag mydevopstask $DOCKER_TASK_IMAGE'
       }
     }
-
-   stage('Test') {
-      echo "testing"
-    }
    stage('Deploy') {
       steps {
         withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
