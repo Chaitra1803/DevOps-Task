@@ -12,7 +12,7 @@ pipeline {
     stage('Build') {
       steps {
         sh 'docker build -t mydevopstask .'
-        sh 'docker tag mydevopstask'
+        sh 'docker tag mydevopstask $DOCKER_TASK_IMAGE'
       }
     }
 
